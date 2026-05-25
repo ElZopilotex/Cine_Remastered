@@ -1,0 +1,142 @@
+clientes = {}
+sala_cine = [
+                  #[---------------------PANTALLA---------------------]
+    
+    
+             [ "1","2","3","4",     "5","6","7","8",    "9","10","11","12",],
+             ["13","14","15","16", "17","18","19","20", "21","22","23","24",],
+             ["25","26","27","28", "29","30","31","32", "33","34","35","36",],
+             ["37","38","39","40", "41","42","43","44", "45","46","47","48",],
+             ["49","50","51","52", "53","54","55","56", "57","58","59","60",],
+             ["61","62","63","64", "65","66","67","68", "69","70","71","72",]
+             ]
+
+def crear_cliente():
+    print("Ingresa tu Rut (Ejemplo: XX.XXX.XXX-K)")
+    Rut = input("Rut: ").strip().upper()
+    if Rut in clientes:
+     print("Usuario Ya Registrado")
+     return
+    else:
+        print("Usuario No Registrado")
+        print("Ingresa tu Nombre")
+        nombre = input("Nombre: ")
+        print("Ingresa tu telefono")
+        telefono = input("Telefono: ")
+        print("Ingresa tu correo")
+        correo = input("Correo: ")
+        print("Tiene vigencia? S / N")
+        vigencia = input("Vigencia: ").strip().upper()
+    clientes [Rut] ={
+    "nombre" : nombre,
+    "telefono" : telefono,
+    "mail" : correo,
+    "vigencia" : vigencia
+    }
+    print("Cliente Registrado con exito")
+
+def listar_cliente():
+    if not clientes:
+        print("No hay clientes registrados")
+    else:
+        print ("Lista de Clientes")
+        for Rut, datos in clientes.items():
+            print(f"RUT: {Rut}")
+            print(f"Nombre: {datos['nombre']}")
+            print(f"Telefono: {datos['telefono']}")
+            print(f"Mail: {datos['mail']}")
+            print(f"Vigencia: {datos['vigencia']}")
+
+def modificar_cliente():
+    if not clientes:
+        print("No se figuran clientes en el sistema")
+        return
+    Rut = input("Ingrese rut de usuario a modificar").strip().upper()
+    if Rut not in clientes:
+        print("Usuario no encontrado")
+    else:
+        print(f"Favor ingresa los nuevos datos para el Rut: {Rut}")
+        nuevo_nombre = input("Ingresa nuevo Nombre: ")
+        nuevo_telefono = input("Ingresa nuevo telefono: ")
+        nuevo_mail = input("Ingresa nuevo mail: ")
+        nueva_vigencia = input("Ingresa nueva vigencia - S/N: ")
+    
+    clientes [Rut] ={
+        "nombre" : nuevo_nombre,
+        "telefono" : nuevo_telefono,
+        "mail" : nuevo_mail,
+        "vigencia" : nueva_vigencia, 
+    }
+    print("Datos actualizados con exito")
+
+def eliminar_cliente():
+     if not clientes:
+        print("No se figuran clientes en el sistema")
+        return
+     Rut = input("Favor ingresa el Rut a eliminar").strip().upper()
+     if Rut not in clientes:
+         print("Usuario no encontrado")
+     else:
+         del clientes [Rut]
+         print("Cliente Eliminado con exito") 
+
+def imprimir_sala():
+    print("\n" + " " * 18 + "[-----------------------PANTALLA-----------------------]\n")
+    letras_pasillo = ["A", "B", "C", "D", "E", "F"]
+    
+    for i in range(len(sala_cine)):
+        fila = sala_cine[i]
+        letra = letras_pasillo[i]
+        
+        bloque1 = " ".join([f"[{asiento:>2}]" for asiento in fila[0:4]])
+        bloque2 = " ".join([f"[{asiento:>2}]" for asiento in fila[4:8]])
+        bloque3 = " ".join([f"[{asiento:>2}]" for asiento in fila[8:12]])
+        
+        print(f"Pasillo {letra}:  {bloque1}     {bloque2}     {bloque3}")
+    print("\n")
+
+        
+def menu_principal():
+   while True:
+        print("==== Bienvenido al sistema de reserva del cine ====")
+
+        print("Seleccione una opcion")
+
+        print("1. Crear cliente")
+        print("2. Listar clientes")
+        print("3. Modificar cliente")
+        print("4. Eliminar cliente")
+        print("5. Reservar asientos")
+        print("6. Modificar reserva")
+        print("7. Eliminar reserva")
+        print("8. Listar reservas")
+        print("9. Imprimir sala")
+        print("10. Salir")
+    
+        opcion = input("Seleccione una opcion: ")
+
+
+        if opcion == "1":
+            crear_cliente() 
+        elif opcion == "2":
+            listar_cliente()
+        elif opcion == "3":
+            modificar_cliente()
+        elif opcion == "4":
+            eliminar_cliente()
+        elif opcion == "5":
+            reserva_de_asientos()
+        elif opcion == "6":
+            modificar_reserva()
+        elif opcion == "7":
+            eliminar_reserva()
+        elif opcion == "8":
+            lista_reservas()
+        elif opcion == "9":
+            imprimir_sala()    
+        elif opcion == "10":
+            print("Saliendo del sistema, Adios!!!")
+        else:
+            print("Opcion no valida, intentelo denuevo")
+
+menu_principal()
