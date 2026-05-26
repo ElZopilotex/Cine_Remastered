@@ -181,10 +181,10 @@ def lista_reservas():
 
 def imprimir_sala():
     print("\n" + " " * 18 + "[-----------------------PANTALLA-----------------------]\n")
-    letras_pasillo = ["A", "B", "C", "D", "E", "F"]
+    letras_fila = ["A", "B", "C", "D", "E", "F"]
     for i in range(len(sala_cine)):
         fila = sala_cine[i]
-        letra = letras_pasillo[i]
+        letra = letras_fila[i]
         bloque1 = " ".join([f"[{asiento:>2}]" for asiento in fila[0:4]])
         bloque2 = " ".join([f"[{asiento:>2}]" for asiento in fila[4:8]])
         bloque3 = " ".join([f"[{asiento:>2}]" for asiento in fila[8:12]])
@@ -214,6 +214,8 @@ def reserva_de_asientos():
             break
         else:
             print("Error: Ingrese una cantidad numérica válida (mayor a 0).")
+
+    imprimir_sala()
     
     asientos_ocupados = obtener_asientos_reservados()
     asientos_nuevos = []
@@ -238,17 +240,17 @@ def reserva_de_asientos():
     for asiento in asientos_nuevos:
         num = int(asiento)
         if num >= 1 and num <= 12:
-            sala_cine[0][num - 1] = "X"
+            sala_cine[0][num - 1] = "XX"
         elif num >= 13 and num <= 24:
-            sala_cine[1][num - 13] = "X"
+            sala_cine[1][num - 13] = "XX"
         elif num >= 25 and num <= 36:
-            sala_cine[2][num - 25] = "X"
+            sala_cine[2][num - 25] = "XX"
         elif num >= 37 and num <= 48:
-            sala_cine[3][num - 37] = "X"
+            sala_cine[3][num - 37] = "XX"
         elif num >= 49 and num <= 60:
-            sala_cine[4][num - 49] = "X"
+            sala_cine[4][num - 49] = "XX"
         elif num >= 61 and num <= 72:
-            sala_cine[5][num - 61] = "X"
+            sala_cine[5][num - 61] = "XX"
             
     reservas[Rut] = asientos_nuevos
     print("Reserva registrada con éxito.")
@@ -268,6 +270,8 @@ def modificar_reserva():
             break
         else:
             print("Error: Ingrese una cantidad numérica válida (mayor a 0).")   
+    
+    imprimir_sala()
     
     asientos_viejos = reservas[Rut]
     asientos_ocupados_otros = []
@@ -312,17 +316,17 @@ def modificar_reserva():
     for asiento in asientos_nuevos:
         num = int(asiento)
         if num >= 1 and num <= 12:
-            sala_cine[0][num - 1] = "X"
+            sala_cine[0][num - 1] = "XX"
         elif num >= 13 and num <= 24:
-            sala_cine[1][num - 13] = "X"
+            sala_cine[1][num - 13] = "XX"
         elif num >= 25 and num <= 36:
-            sala_cine[2][num - 25] = "X"
+            sala_cine[2][num - 25] = "XX"
         elif num >= 37 and num <= 48:
-            sala_cine[3][num - 37] = "X"
+            sala_cine[3][num - 37] = "XX"
         elif num >= 49 and num <= 60:
-            sala_cine[4][num - 49] = "X"
+            sala_cine[4][num - 49] = "XX"
         elif num >= 61 and num <= 72:
-            sala_cine[5][num - 61] = "X"
+            sala_cine[5][num - 61] = "XX"
 
     reservas[Rut] = asientos_nuevos
     print("Reserva modificada con éxito.")
