@@ -1,4 +1,5 @@
 clientes = {}
+reservas = {}
 sala_cine = [
                   #[---------------------PANTALLA---------------------]
     
@@ -80,6 +81,48 @@ def eliminar_cliente():
          del clientes [Rut]
          print("Cliente Eliminado con exito") 
 
+def eliminar_reserva():
+    if not reservas:
+        print("No hay reservas registradas en el sistema.")
+        return
+    
+    asiento_eliminar = input("Ingrese el número del asiento que desea liberar: ").strip()
+    
+    if asiento_eliminar not in reservas:
+        print("Ese asiento no se encuentra reservado.")
+    else:
+        rut_cliente = reservas[asiento_eliminar]
+        nombre_cliente = clientes.get(rut_cliente, {}).get("nombre", "Cliente Desconocido")
+        
+        del reservas[asiento_eliminar]
+     
+        for fila in sala_cine:
+            if "X" in fila: 
+                
+                pass
+        
+        for i in range(len(sala_cine)):
+            for j in range(len(sala_cine[i])):
+                
+                numero_original = str((i * 12) + (j + 1))
+                if numero_original == asiento_eliminar:
+                    sala_cine[i][j] = numero_original
+        
+        print(f"Reserva del asiento {asiento_eliminar} (Cliente: {nombre_cliente}) eliminada con éxito.")
+
+
+def lista_reservas():
+    if not reservas:
+        print("No hay asientos reservados actualmente.")
+    else:
+        print("\n================ LISTA DE RESERVAS ================")
+        print(f"{'Asiento':<10}{'RUT Cliente':<15}{'Nombre Cliente':<20}")
+        print("-" * 45)
+        for asiento, rut in reservas.items():
+            
+            nombre = clientes.get(rut, {}).get("nombre", "No registrado")
+            print(f"{asiento:<10}{rut:<15}{nombre:<20}")
+        print("===================================================\n")
 def imprimir_sala():
     print("\n" + " " * 18 + "[-----------------------PANTALLA-----------------------]\n")
     letras_pasillo = ["A", "B", "C", "D", "E", "F"]
