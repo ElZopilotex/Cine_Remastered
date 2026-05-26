@@ -12,6 +12,19 @@ sala_cine = [
              ["61","62","63","64", "65","66","67","68", "69","70","71","72",]
              ]
 
+reservas = {}
+def obtener_asientos_reservados():
+
+    asientos_ocupados = []
+
+    for lista_asientos in reservas.values():
+
+        for asiento in lista_asientos:
+
+            asientos_ocupados.append(asiento)
+
+    return asientos_ocupados
+
 def crear_cliente():
     print("Ingresa tu Rut (Ejemplo: XX.XXX.XXX-K)")
     Rut = input("Rut: ").strip().upper()
@@ -124,21 +137,190 @@ def lista_reservas():
             print(f"{asiento:<10}{rut:<15}{nombre:<20}")
         print("===================================================\n")
 def imprimir_sala():
+
+    ocupados = obtener_asientos_reservados()
+
     print("\n" + " " * 18 + "[-----------------------PANTALLA-----------------------]\n")
+
     letras_pasillo = ["A", "B", "C", "D", "E", "F"]
-    
+
     for i in range(len(sala_cine)):
+
         fila = sala_cine[i]
         letra = letras_pasillo[i]
-        
-        bloque1 = " ".join([f"[{asiento:>2}]" for asiento in fila[0:4]])
-        bloque2 = " ".join([f"[{asiento:>2}]" for asiento in fila[4:8]])
-        bloque3 = " ".join([f"[{asiento:>2}]" for asiento in fila[8:12]])
-        
+
+        fila_mostrar = []
+
+        for asiento in fila:
+
+            if asiento in ocupados:
+                fila_mostrar.append("[XX]")
+            else:
+                fila_mostrar.append(f"[{asiento:>2}]")
+
+        bloque1 = " ".join(fila_mostrar[0:4])
+        bloque2 = " ".join(fila_mostrar[4:8])
+        bloque3 = " ".join(fila_mostrar[8:12])
+
         print(f"Pasillo {letra}:  {bloque1}     {bloque2}     {bloque3}")
+
     print("\n")
 
-        
+
+def reserva_de_asientos():
+
+    Rut = input("Ingresa tu Rut: ").strip().upper()
+
+    # Verificar si existe el cliente
+    if Rut not in clientes:
+        print("Cliente no registrado")
+        return
+
+    # Verificar vigencia
+    if clientes[Rut]["vigencia"] != "S":
+        print("Cliente no vigente")
+        return
+
+    imprimir_sala()
+
+    print("Ingresa los asientos separados por coma")
+    print("Ejemplo: 5,6,7")
+
+    entrada = input("Asientos: ")
+
+    lista_asientos = entrada.split(",")
+
+    nuevos_asientos = []
+
+    # Obtener asientos reservados
+    ocupados = obtener_asientos_reservados()
+
+    # Crear lista de asientos existentes
+    asientos_existentes = []
+
+    for fila in sala_cine:
+
+        for asiento in fila:
+
+            asientos_existentes.append(asiento)
+
+    # Validar asientos
+    for asiento in lista_asientos:
+
+        asiento = asiento.strip()
+
+        # Validar existencia
+        if asiento not in asientos_existentes:
+            print(f"El asiento {asiento} no existe")
+            return
+
+        # Validar disponibilidad
+        if asiento in ocupados:
+            print(f"El asiento {asiento} ya está reservado")
+            return
+
+        nuevos_asientos.append(asiento)
+
+    # Guardar reserva
+    reservas[Rut] = nuevos_asientos
+
+    print("Reserva realizada con éxito")
+
+
+def modificar_reserva():
+
+    Rut = input("Ingresa el Rut: ").strip().upper()
+
+    # Verificar si tiene reserva
+    if Rut not in reservas:
+        print("El cliente no tiene reservas")
+        return
+
+    print(f"Reserva actual: {reservas[Rut]}")
+
+    imprimir_sala()
+
+    print("Ingresa los nuevos asientos separados por coma")
+    print("Ejemplo: 10,11,12")
+
+    entrada = input("Nuevos asientos: ")
+
+    nuevos = entrada.split(",")
+
+    nuevos_asientos = []
+
+    # Lista de asientos existentes
+    asientos_existentes = []
+
+    for fila in sala_cine:
+
+        for asiento in fila:
+
+            asientos_existentes.append(asiento)
+
+    # Asientos ocupados por OTROS clientes
+    ocupados = []
+
+    for rut_cliente, lista in reservas.items():
+
+        if rut_cliente != Rut:
+
+            for asiento in lista:
+
+                ocupados.append(asiento)
+
+    # Validaciones
+    for asiento in nuevos:
+
+        asiento = asiento.strip()
+
+        # Validar existencia
+        if asiento not in asientos_existentes:
+            print(f"El asiento {asiento} no existe")
+            return
+
+        # Validar disponibilidad
+        if asiento in ocupados:
+            print(f"El asiento {asiento} ya está ocupado")
+            return
+
+        nuevos_asientos.append(asiento)
+
+    # Actualizar reserva
+    reservas[Rut] = nuevos_asientos
+
+    print("Reserva modificada con éxito")
+
+def eliminar_reserva():
+
+    Rut = input("Ingresa el Rut: ").strip().upper()
+
+    if Rut not in reservas:
+        print("No existe reserva para ese cliente")
+        return
+
+    del reservas[Rut]
+
+    print("Reserva eliminada con éxito")
+
+
+def lista_reservas():
+
+    if not reservas:
+        print("No hay reservas registradas")
+        return
+
+    print("===== LISTA DE RESERVAS =====")
+
+    for Rut, asientos in reservas.items():
+
+        nombre = clientes[Rut]["nombre"]
+
+        print(f"Rut: {Rut}")
+        print(f"Nombre: {nombre}")
+        print(f"Asientos: {asientos}")
+        print("-----------------------------")
+
 def menu_principal():
    while True:
         print("==== Bienvenido al sistema de reserva del cine ====")
@@ -179,6 +361,7 @@ def menu_principal():
             imprimir_sala()    
         elif opcion == "10":
             print("Saliendo del sistema, Adios!!!")
+            break
         else:
             print("Opcion no valida, intentelo denuevo")
 
